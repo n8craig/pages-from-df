@@ -1,0 +1,29 @@
+# Preface {.unnumbered}
+
+This Quarto book demonstrates the creation of a series of individual pages for each record from a table and then linking those objects to a searchable table.
+
+[This](https://zsmith27.github.io/rmarkdown_crash-course/lesson-7-parameterized-reports.html#rmarkdownrender) page had the function that I used. It relies on `lapply` rather than a `for` loop.
+
+```{r}
+#| echo: false
+#| 
+knitr::opts_chunk$set(
+  echo = FALSE
+)
+```
+
+```{r}
+df <- readRDS("df_temp.rds")
+```
+
+```{r}
+df |> 
+  dplyr::select(-c(bill_length_mm,
+                   bill_depth_mm, 
+                   flipper_length_mm, 
+                   body_mass_g, 
+                   id)) |> 
+  DT::datatable(escape = FALSE,
+                rownames = FALSE)
+```
+

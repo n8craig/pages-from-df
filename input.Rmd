@@ -1,0 +1,62 @@
+---
+title: "Report for Penguin `r params$id`"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+format: html
+params:
+  id: "id"
+---
+
+```{r}
+#| echo: false
+knitr::opts_chunk$set(
+  echo = FALSE
+)
+```
+
+
+```{r}
+#| eval: false
+
+# grabs the whole df, mostly for a check
+df |> knitr::kable()
+```
+
+```{r}
+#| eval: false
+
+# filter when df$id is in params$id
+dplyr::filter(df, id %in% params$id) |>  
+  knitr::kable()
+```
+
+## Penguin Report
+
+Penguin number `r params$id` is a `r df$sex[df$id %in% params$id]` of the `r df$species[df$id %in% params$id]` species and was recorded on the island of `r df$island[df$id %in% params$id]` in `r df$year[df$id %in% params$id]`. This penguin has a body mass of `r df$body_mass_g[df$id %in% params$id]`(g), bill length of `r df$bill_length_mm[df$id %in% params$id]`(mm), and bill depth of `r df$bill_depth_mm[df$id %in% params$id]`(mm).
+
+|                                                          |                                                        |                                                                |
+|-----------------------|----------------------|---------------------------|
+| ID: `r df$id[df$id %in% params$id]`                      | Species: `r df$species[df$id %in% params$id]`          | Sex: `r df$sex[df$id %in% params$id]`                          |
+| Year: `r df$year[df$id %in% params$id]`                  | Island: `r df$island[df$id %in% params$id]`            | Body Mass: `r df$body_mass_g[df$id %in% params$id]`            |
+| Bill Length: `r df$bill_length_mm[df$id %in% params$id]` | Bill Depth: `r df$bill_depth_mm[df$id %in% params$id]` | Flipper Length: `r df$flipper_length_mm[df$id %in% params$id]` |
+
+```{r}
+library(ggplot2)
+library(gghighlight)
+```
+
+
+```{r}
+#| label: fig-plot
+#| fig-cap: "Plot"
+#| warning: false
+#| message: false
+ggplot(data = df,
+                aes(x = flipper_length_mm,
+                    y = bill_length_mm)) +
+  geom_point(aes(color = species,
+                 shape = species),
+             size = 3,
+             alpha = 0.8) +
+  gghighlight(df$id %in% params$id,
+              label_key = id)
+```
